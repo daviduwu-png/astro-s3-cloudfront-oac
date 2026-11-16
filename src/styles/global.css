@@ -1,0 +1,248 @@
+:root {
+  /* Fondos: Azul oscuro profundo y Morado oscuro */
+  --bg-primary: #070b19;
+  --bg-secondary: #0d142b;
+  --bg-purple-dark: #150e2c;
+  --bg-card: #101732;
+  --bg-card-alt: #161136;
+  --bg-code: #050814;
+
+  /* Tipografia y Acentos: Azul claro y Morado claro */
+  --text-primary: #f0f6ff;
+  --text-secondary: #b4c6e7;
+  --text-muted: #7e93b8;
+
+  --purple-light: #c084fc;
+  --purple-solid: #7c3aed;
+  --purple-solid-hover: #6d28d9;
+  --purple-soft: rgba(168, 85, 247, 0.14);
+
+  --blue-light: #60a5fa;
+  --blue-sky: #38bdf8;
+  --blue-solid: #2563eb;
+  --blue-soft: rgba(56, 189, 248, 0.14);
+
+  --border-subtle: rgba(147, 197, 253, 0.15);
+  --border-highlight: rgba(192, 132, 252, 0.55);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  --container-max: 1180px;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--bg-primary);
+  position: relative;
+}
+
+/* Malla arquitectonica de fondo estilo Landing Page */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image:
+    linear-gradient(to right, rgba(96, 165, 250, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(192, 132, 252, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 25%, #000 55%, transparent 100%);
+  pointer-events: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+code,
+pre {
+  font-family: var(--font-mono);
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  padding: 5.75rem 0;
+  position: relative;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.75rem;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+/* Tarjetas con linea superior animada tipo Landing Page */
+.card {
+  position: relative;
+  background: linear-gradient(160deg, var(--bg-card) 0%, var(--bg-card-alt) 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  overflow: hidden;
+  transition:
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.32s ease,
+    background-color 0.32s ease;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--purple-light), var(--blue-light));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-highlight);
+}
+
+.card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Botones solidos, limpios, sin brillo ni blur */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.82rem 1.45rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.94rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  box-shadow: none;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btn svg {
+  transition: transform 0.22s ease;
+}
+
+.btn:hover svg {
+  transform: translateX(3px);
+}
+
+.btn-primary {
+  background-color: var(--purple-solid);
+  color: var(--text-primary);
+  border-color: rgba(192, 132, 252, 0.35);
+}
+
+.btn-primary:hover {
+  background-color: var(--purple-solid-hover);
+  border-color: var(--purple-light);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: var(--bg-secondary);
+  color: var(--blue-light);
+  border-color: rgba(96, 165, 250, 0.35);
+}
+
+.btn-secondary:hover {
+  background-color: #162044;
+  color: var(--text-primary);
+  border-color: var(--blue-light);
+  transform: translateY(-2px);
+}
+
+/* Sistema de Animaciones Scroll Reveal para Landing Page */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--delay, 0ms);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes floatSlow {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 920px) {
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .section {
+    padding: 4rem 0;
+  }
+}

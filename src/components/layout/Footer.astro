@@ -1,0 +1,83 @@
+---
+import { siteConfig } from '../../config/site.config';
+---
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-left">
+      <p class="footer-brand">
+        <strong>{siteConfig.author}</strong> • {siteConfig.role}
+      </p>
+      <p class="footer-desc">
+        Desarrollo de aplicaciones web modernas, diseño de APIs escalables y soluciones digitales de alto rendimiento.
+      </p>
+    </div>
+
+    <div class="footer-meta">
+      <div class="meta-item">
+        <span class="meta-label">Contacto:</span>
+        <code>{siteConfig.email}</code>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Stack:</span>
+        <code>TypeScript • Astro • React • Node.js</code>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border-subtle);
+    padding: 3rem 0;
+    background: rgba(5, 8, 20, 0.9);
+    margin-top: 3rem;
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-left {
+    max-width: 520px;
+  }
+
+  .footer-brand {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .footer-desc {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+  }
+
+  .footer-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-size: 0.82rem;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .meta-label {
+    color: var(--text-muted);
+  }
+
+  code {
+    color: var(--purple-light);
+    background: var(--purple-soft);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+  }
+</style>

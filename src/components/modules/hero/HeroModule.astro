@@ -1,0 +1,395 @@
+---
+import { profileData } from '../../../data/profile.data';
+import Badge from '../../ui/Badge.astro';
+import Icon from '../../ui/Icon.astro';
+
+const techRibbon = [
+  'TypeScript',
+  'Astro',
+  'React',
+  'Next.js',
+  'Node.js',
+  'PostgreSQL',
+  'Redis',
+  'GraphQL',
+  'Docker',
+  'AWS Cloud',
+  'CI/CD Pipelines',
+  'Clean Architecture',
+];
+---
+
+<section id="inicio" class="section hero-section">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-content reveal">
+        <div class="hero-badges">
+          <Badge variant="purple">
+            <Icon name="code" size={14} />
+            <span>{profileData.specialtyBadge}</span>
+          </Badge>
+          <Badge variant="blue">
+            <Icon name="globe" size={14} />
+            <span>{profileData.location}</span>
+          </Badge>
+        </div>
+
+        <h1 class="hero-title">
+          Hola, soy <span class="gradient-name">{profileData.name}</span>
+          <span class="hero-role">{profileData.role}</span>
+        </h1>
+
+        <p class="hero-bio">{profileData.bio}</p>
+
+        <div class="hero-actions">
+          <a href="#proyectos" class="btn btn-primary">
+            <Icon name="layers" size={18} />
+            <span>Explorar Proyectos</span>
+          </a>
+          <a href="#contacto" class="btn btn-secondary">
+            <span>Hablemos de tu Proyecto</span>
+            <Icon name="arrow-right" size={16} />
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-showcase card reveal" style="--delay: 140ms;">
+        <div class="showcase-header">
+          <div class="dots">
+            <span class="dot dot-purple"></span>
+            <span class="dot dot-blue"></span>
+            <span class="dot dot-cyan"></span>
+          </div>
+          <span class="showcase-title">developer-architecture.ts</span>
+        </div>
+
+        <div class="profile-pillars">
+          <div class="pillar-item highlight-purple">
+            <span class="pillar-icon purple-icon">
+              <Icon name="code" size={20} />
+            </span>
+            <div>
+              <strong>Frontend & UI Modular</strong>
+              <p>Interfaces rápidas y accesibles con Astro, React y TypeScript</p>
+            </div>
+            <span class="pillar-tag purple">UI / UX</span>
+          </div>
+
+          <div class="pillar-item highlight-blue">
+            <span class="pillar-icon blue-icon">
+              <Icon name="server" size={20} />
+            </span>
+            <div>
+              <strong>Backend & APIs Escalables</strong>
+              <p>Servicios REST/GraphQL con Node.js, PostgreSQL y Redis</p>
+            </div>
+            <span class="pillar-tag blue">API</span>
+          </div>
+
+          <div class="pillar-item">
+            <span class="pillar-icon">
+              <Icon name="cloud" size={20} />
+            </span>
+            <div>
+              <strong>Cloud & Despliegue Continuo</strong>
+              <p>Automatización CI/CD, contenedores Docker y CDN global</p>
+            </div>
+            <span class="pillar-tag">Cloud</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      {
+        profileData.stats.map((stat, idx) => (
+          <div class="stat-card card reveal" style={`--delay: ${idx * 90}ms;`}>
+            <span class="stat-value">{stat.value}</span>
+            <strong class="stat-label">{stat.label}</strong>
+            <span class="stat-detail">{stat.detail}</span>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Banda animada tipo Landing Page (Marquee de tecnologias) -->
+    <div class="tech-marquee reveal" style="--delay: 220ms;" aria-label="Tecnologías principales">
+      <div class="marquee-track">
+        {
+          [...techRibbon, ...techRibbon].map((item) => (
+            <span class="marquee-item">
+              <Icon name="zap" size={14} class="marquee-icon" />
+              {item}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    padding-top: 4.5rem;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.25rem, 4.5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.25rem;
+  }
+
+  .gradient-name {
+    color: var(--purple-light);
+    border-bottom: 3px solid rgba(96, 165, 250, 0.45);
+  }
+
+  .hero-role {
+    display: block;
+    font-size: clamp(1.3rem, 2.4vw, 1.75rem);
+    color: var(--blue-light);
+    font-weight: 600;
+    margin-top: 0.55rem;
+  }
+
+  .hero-bio {
+    font-size: 1.06rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    max-width: 600px;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .hero-showcase {
+    background: linear-gradient(160deg, var(--bg-card) 0%, var(--bg-purple-dark) 100%);
+    border-color: rgba(192, 132, 252, 0.35);
+    padding: 1.5rem;
+    animation: floatSlow 6s ease-in-out infinite;
+  }
+
+  .showcase-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    margin-bottom: 1.1rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .dots {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .dot-purple {
+    background: var(--purple-light);
+  }
+  .dot-blue {
+    background: var(--blue-light);
+  }
+  .dot-cyan {
+    background: var(--blue-sky);
+  }
+
+  .showcase-title {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .profile-pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .pillar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.95rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+
+  .pillar-item:hover {
+    transform: translateX(6px);
+    border-color: var(--purple-light);
+  }
+
+  .pillar-item.highlight-purple {
+    border-left: 3px solid var(--purple-light);
+  }
+
+  .pillar-item.highlight-blue {
+    border-left: 3px solid var(--blue-light);
+  }
+
+  .pillar-icon {
+    display: grid;
+    place-items: center;
+    width: 2.3rem;
+    height: 2.3rem;
+    border-radius: 8px;
+    background: rgba(147, 197, 253, 0.12);
+    color: var(--blue-light);
+    flex-shrink: 0;
+  }
+
+  .pillar-icon.purple-icon {
+    color: var(--purple-light);
+    background: rgba(168, 85, 247, 0.18);
+  }
+
+  .pillar-icon.blue-icon {
+    color: var(--blue-light);
+    background: rgba(56, 189, 248, 0.18);
+  }
+
+  .pillar-item strong {
+    display: block;
+    font-size: 0.92rem;
+    color: var(--text-primary);
+  }
+
+  .pillar-item p {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+  }
+
+  .pillar-tag {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    background: rgba(147, 197, 253, 0.12);
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  .pillar-tag.purple {
+    color: var(--purple-light);
+    background: rgba(168, 85, 247, 0.2);
+  }
+
+  .pillar-tag.blue {
+    color: var(--blue-light);
+    background: rgba(56, 189, 248, 0.2);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: 3.25rem;
+  }
+
+  .stat-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.35rem 1.5rem;
+  }
+
+  .stat-value {
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: var(--purple-light);
+    font-family: var(--font-mono);
+    line-height: 1.1;
+  }
+
+  .stat-label {
+    margin-top: 0.4rem;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+  }
+
+  .stat-detail {
+    font-size: 0.8rem;
+    color: var(--blue-light);
+    margin-top: 0.2rem;
+  }
+
+  /* Marquee estilo Landing Page */
+  .tech-marquee {
+    margin-top: 2.5rem;
+    overflow: hidden;
+    padding: 0.95rem 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    background-color: rgba(13, 20, 43, 0.65);
+    mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    gap: 2.5rem;
+    animation: marqueeScroll 28s linear infinite;
+  }
+
+  .tech-marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  .marquee-icon {
+    color: var(--purple-light);
+  }
+
+  @media (max-width: 960px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

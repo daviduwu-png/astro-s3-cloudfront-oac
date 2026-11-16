@@ -1,0 +1,60 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Icon from '../components/ui/Icon.astro';
+---
+
+<MainLayout title="404 - Página no encontrada | Alex Rivera">
+  <section class="section error-section">
+    <div class="container">
+      <div class="card error-card">
+        <span class="error-code">404</span>
+        <h1>Página no encontrada</h1>
+        <p>
+          La ruta que estás buscando no existe o fue movida a otra dirección dentro del portafolio.
+        </p>
+        <a href="/" class="btn btn-primary">
+          <Icon name="arrow-right" size={16} />
+          <span>Volver al Inicio</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .error-section {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .error-card {
+    max-width: 580px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+
+  .error-code {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 4.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--purple-light), var(--blue-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .error-card h1 {
+    font-size: 1.65rem;
+    margin-bottom: 0.85rem;
+    color: var(--text-primary);
+  }
+
+  .error-card p {
+    color: var(--text-secondary);
+    margin-bottom: 1.75rem;
+  }
+</style>

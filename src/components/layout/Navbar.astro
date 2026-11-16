@@ -1,0 +1,168 @@
+---
+import { siteConfig } from '../../config/site.config';
+import Icon from '../ui/Icon.astro';
+---
+
+<header class="navbar-wrapper">
+  <div class="container navbar">
+    <a href="#inicio" class="brand">
+      <span class="brand-icon">
+        <Icon name="code" size={20} />
+      </span>
+      <div class="brand-text">
+        <span class="brand-name">Alex<span class="accent">Rivera</span></span>
+        <span class="brand-sub">Full-Stack Developer</span>
+      </div>
+    </a>
+
+    <nav class="nav-links" aria-label="Navegación principal">
+      {
+        siteConfig.navItems.map((item) => (
+          <a href={item.href} class="nav-link">
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="nav-cta">
+      <a href="#contacto" class="status-pill">
+        <span class="status-dot"></span>
+        <span>Disponible para proyectos</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .navbar-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: rgba(7, 11, 25, 0.92);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+    gap: 1rem;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .brand-icon {
+    display: grid;
+    place-items: center;
+    width: 2.3rem;
+    height: 2.3rem;
+    border-radius: 8px;
+    background: var(--bg-purple-dark);
+    border: 1px solid rgba(192, 132, 252, 0.35);
+    color: var(--purple-light);
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+
+  .brand:hover .brand-icon {
+    transform: rotate(-6deg) scale(1.05);
+    border-color: var(--purple-light);
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+
+  .brand-name {
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
+  }
+
+  .accent {
+    color: var(--purple-light);
+  }
+
+  .brand-sub {
+    font-size: 0.7rem;
+    color: var(--blue-light);
+    font-family: var(--font-mono);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+  }
+
+  .nav-link {
+    position: relative;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    padding: 0.25rem 0;
+    transition: color 0.2s ease;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 2px;
+    background-color: var(--purple-light);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.28s ease;
+  }
+
+  .nav-link:hover {
+    color: var(--text-primary);
+  }
+
+  .nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.42rem 0.9rem;
+    border-radius: 6px;
+    font-size: 0.76rem;
+    font-family: var(--font-mono);
+    background-color: var(--bg-secondary);
+    color: var(--blue-light);
+    border: 1px solid rgba(96, 165, 250, 0.32);
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .status-pill:hover {
+    background-color: var(--bg-purple-dark);
+    border-color: var(--purple-light);
+    color: var(--purple-light);
+  }
+
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--blue-light);
+  }
+
+  @media (max-width: 860px) {
+    .nav-links {
+      display: none;
+    }
+  }
+</style>

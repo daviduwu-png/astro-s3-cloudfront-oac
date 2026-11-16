@@ -1,0 +1,40 @@
+---
+import Badge from './Badge.astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  variant?: 'purple' | 'blue' | 'neutral';
+}
+
+const { eyebrow, title, subtitle, variant = 'purple' } = Astro.props;
+---
+
+<div class="section-header reveal">
+  <Badge variant={variant}>{eyebrow}</Badge>
+  <h2 class="section-title">{title}</h2>
+  <p class="section-subtitle">{subtitle}</p>
+</div>
+
+<style>
+  .section-header {
+    max-width: 720px;
+    margin-bottom: 3rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.85rem, 3.5vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-top: 0.85rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+    color: var(--text-primary);
+  }
+
+  .section-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+  }
+</style>

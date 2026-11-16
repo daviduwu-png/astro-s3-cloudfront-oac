@@ -1,0 +1,43 @@
+---
+interface Props {
+  variant?: 'purple' | 'blue' | 'neutral';
+}
+
+const { variant = 'purple' } = Astro.props;
+---
+
+<span class={`badge badge-${variant}`}>
+  <slot />
+</span>
+
+<style>
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.78rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border: 1px solid transparent;
+  }
+
+  .badge-purple {
+    background: var(--purple-soft);
+    color: var(--purple-light);
+    border-color: rgba(192, 132, 252, 0.35);
+  }
+
+  .badge-blue {
+    background: var(--blue-soft);
+    color: var(--blue-light);
+    border-color: rgba(96, 165, 250, 0.35);
+  }
+
+  .badge-neutral {
+    background: rgba(180, 198, 231, 0.1);
+    color: var(--text-secondary);
+    border-color: var(--border-subtle);
+  }
+</style>

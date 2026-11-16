@@ -1,0 +1,115 @@
+---
+import { servicesData } from '../../../data/services.data';
+import SectionHeader from '../../ui/SectionHeader.astro';
+import Icon from '../../ui/Icon.astro';
+---
+
+<section id="servicios" class="section">
+  <div class="container">
+    <SectionHeader
+      eyebrow="Especialidades & Soluciones"
+      title="Desarrollo de Software de Extremo a Extremo"
+      subtitle="Diseño y construcción de productos digitales aplicando patrones de arquitectura limpia, código mantenible y alto rendimiento."
+      variant="blue"
+    />
+
+    <div class="grid-3">
+      {
+        servicesData.map((service, idx) => (
+          <article class="card service-card reveal" style={`--delay: ${idx * 110}ms;`}>
+            <div class="service-top">
+              <div class="service-icon">
+                <Icon name={service.icon} size={22} />
+              </div>
+              <span class="service-index">0{idx + 1}</span>
+            </div>
+
+            <h3>{service.title}</h3>
+            <p class="service-desc">{service.description}</p>
+
+            <ul class="deliverables-list">
+              {service.deliverables.map((item) => (
+                <li>
+                  <Icon name="check" size={14} class="check-icon" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .service-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .service-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .service-icon {
+    display: grid;
+    place-items: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 10px;
+    background: var(--bg-purple-dark);
+    color: var(--purple-light);
+    border: 1px solid rgba(192, 132, 252, 0.35);
+    transition: transform 0.28s ease, background-color 0.28s ease;
+  }
+
+  .service-card:hover .service-icon {
+    transform: scale(1.08);
+    background-color: rgba(124, 58, 237, 0.25);
+  }
+
+  .service-index {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--blue-light);
+    opacity: 0.65;
+  }
+
+  .service-card h3 {
+    font-size: 1.22rem;
+    color: var(--text-primary);
+  }
+
+  .service-desc {
+    color: var(--text-secondary);
+    font-size: 0.93rem;
+  }
+
+  .deliverables-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .deliverables-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.86rem;
+    color: var(--text-primary);
+  }
+
+  .check-icon {
+    color: var(--blue-light);
+    margin-top: 0.2rem;
+  }
+</style>

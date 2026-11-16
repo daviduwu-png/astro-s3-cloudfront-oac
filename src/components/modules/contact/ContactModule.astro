@@ -1,0 +1,121 @@
+---
+import { siteConfig } from '../../../config/site.config';
+import Icon from '../../ui/Icon.astro';
+---
+
+<section id="contacto" class="section">
+  <div class="container">
+    <div class="card contact-card reveal">
+      <div class="contact-content">
+        <span class="contact-eyebrow">
+          <Icon name="mail" size={15} />
+          <span>Contacto Directo</span>
+        </span>
+        <h2>¿Tienes un proyecto o vacante en mente?</h2>
+        <p>
+          Estoy disponible para colaborar en el desarrollo de nuevas aplicaciones web, arquitectura de software o consultoría técnica. Escríbeme y conversemos sobre cómo puedo aportar valor a tu equipo.
+        </p>
+
+        <div class="contact-actions">
+          <a href={`mailto:${siteConfig.email}`} class="btn btn-primary">
+            <Icon name="mail" size={18} />
+            <span>Enviar Correo</span>
+          </a>
+          <a href={siteConfig.socials.github} target="_blank" rel="noreferrer" class="btn btn-secondary">
+            <Icon name="github" size={18} />
+            <span>GitHub</span>
+          </a>
+          <a href={siteConfig.socials.linkedin} target="_blank" rel="noreferrer" class="btn btn-secondary">
+            <Icon name="linkedin" size={18} />
+            <span>LinkedIn</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-box">
+        <div class="box-bar">
+          <span>contact-info.json</span>
+        </div>
+        <pre><code>{`{
+  "developer": "Alex Rivera",
+  "role": "Senior Full-Stack Developer",
+  "email": "${siteConfig.email}",
+  "status": "Available for new projects",
+  "timezone": "UTC-6 / Remote"
+}`}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-card {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 2rem;
+    align-items: center;
+    border-color: rgba(192, 132, 252, 0.35);
+    background: linear-gradient(155deg, var(--bg-card) 0%, var(--bg-purple-dark) 100%);
+  }
+
+  .contact-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--purple-light);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.65rem;
+  }
+
+  .contact-content h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+    color: var(--text-primary);
+  }
+
+  .contact-content p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    font-size: 0.98rem;
+  }
+
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+  }
+
+  .contact-box {
+    background: var(--bg-code);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    overflow: hidden;
+  }
+
+  .box-bar {
+    background: var(--bg-purple-dark);
+    padding: 0.55rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--purple-light);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .contact-box pre {
+    padding: 1.15rem;
+    font-size: 0.82rem;
+    color: var(--blue-light);
+    overflow-x: auto;
+    line-height: 1.65;
+  }
+
+  @media (max-width: 900px) {
+    .contact-card {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

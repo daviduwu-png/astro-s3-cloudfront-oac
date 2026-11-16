@@ -1,0 +1,128 @@
+---
+import { skillsData } from '../../../data/skills.data';
+import SectionHeader from '../../ui/SectionHeader.astro';
+import Icon from '../../ui/Icon.astro';
+---
+
+<section id="habilidades" class="section">
+  <div class="container">
+    <SectionHeader
+      eyebrow="Competencias Técnicas"
+      title="Tecnologías & Herramientas de Desarrollo"
+      subtitle="Dominio técnico en desarrollo de interfaces, arquitectura de servidor, bases de datos e infraestructura en la nube."
+      variant="blue"
+    />
+
+    <div class="grid-3">
+      {
+        skillsData.map((group, idx) => (
+          <article class="card skill-card reveal" style={`--delay: ${idx * 110}ms;`}>
+            <div class="skill-header">
+              <span class="skill-icon">
+                <Icon name={group.icon} size={22} />
+              </span>
+              <div>
+                <h3>{group.title}</h3>
+                <p>{group.description}</p>
+              </div>
+            </div>
+
+            <ul class="skill-list">
+              {group.skills.map((skill) => (
+                <li class="skill-item">
+                  <span class="skill-name">
+                    <Icon name="check" size={14} class="check-icon" />
+                    {skill.name}
+                  </span>
+                  <span class="skill-level">{skill.level}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .skill-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+  }
+
+  .skill-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+  }
+
+  .skill-icon {
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 10px;
+    background: var(--bg-secondary);
+    color: var(--blue-light);
+    border: 1px solid rgba(96, 165, 250, 0.35);
+    flex-shrink: 0;
+  }
+
+  .skill-header h3 {
+    font-size: 1.12rem;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+  }
+
+  .skill-header p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .skill-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 1.1rem;
+  }
+
+  .skill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    padding: 0.25rem 0;
+    transition: transform 0.2s ease;
+  }
+
+  .skill-item:hover {
+    transform: translateX(4px);
+  }
+
+  .skill-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--text-primary);
+  }
+
+  .check-icon {
+    color: var(--purple-light);
+  }
+
+  .skill-level {
+    font-family: var(--font-mono);
+    font-size: 0.73rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    background: var(--bg-purple-dark);
+    color: var(--purple-light);
+    border: 1px solid rgba(192, 132, 252, 0.25);
+    white-space: nowrap;
+  }
+</style>

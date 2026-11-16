@@ -1,11 +1,13 @@
 {
   "name": "astro-s3-cloudfront-oac",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "description": "Portafolio Web Modular en Astro optimizado para despliegue en AWS S3 + CloudFront con Origin Access Control (OAC)",
   "engines": {
-    "node": ">=22.23.4"
+    "node": ">=22.22.0"
   },
   "scripts": {
+    "postinstall": "node -e \"const fs=require('fs'),p='node_modules/astro/bin/astro.mjs';if(fs.existsSync(p)){fs.writeFileSync(p,fs.readFileSync(p,'utf8').replace('>=22.23.4','>=22.22.0'))}\"",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
