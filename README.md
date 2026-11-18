@@ -15,6 +15,7 @@ Plantilla de portafolio profesional para desarrolladores de software construida 
 7. [Guía de Despliegue: Opción 2 — Terminal con AWS CLI](#7-guía-de-despliegue-opción-2--terminal-con-aws-cli)
 8. [Verificación y Pruebas de Seguridad](#8-verificación-y-pruebas-de-seguridad)
 9. [Actualización del Sitio e Invalidación de Caché](#9-actualización-del-sitio-e-invalidación-de-caché)
+10. [Eliminación de Recursos (Cleanup)](#10-eliminación-de-recursos-cleanup)
 
 ---
 
@@ -200,7 +201,9 @@ Esta política restringe las acciones de S3 exclusivamente a buckets cuyo nombre
         "cloudfront:ListResponseHeadersPolicies",
         "cloudfront:CreateInvalidation",
         "cloudfront:GetInvalidation",
-        "cloudfront:ListInvalidations"
+        "cloudfront:ListInvalidations",
+        "cloudfront:TagResource",
+        "cloudfront:ListTagsForResource"
       ],
       "Resource": "*"
     },
@@ -274,20 +277,21 @@ Ejecuta `npm run build` en tu máquina local para generar la carpeta `dist/`.
 1. En la consola de **Amazon S3**, haz clic en **Create bucket**.
 2. Asigna un nombre único respetando el prefijo (por ejemplo `portafolio-astro-oac-web`) y selecciona tu región (`us-east-1`).
 3. Asegúrate de mantener marcada la casilla **Block all public access** (Bloquear todo el acceso público).
-4. Crea el bucket, entra en él y presiona **Upload** para subir **el contenido interno de la carpeta `dist/`** (`index.html`, `404.html`, `favicon.svg` y la carpeta `_astro/`).
+4. Crea el bucket, entra en él y presiona **Upload** para subir **el contenido interno de la carpeta `dist/`** (`index.html`, `404.html`, `favicon.ico`, `favicon.svg` y la carpeta `_astro/`). *Importante: no subas la carpeta `dist/` completa, sino los archivos y `_astro/` que están adentro, para que `index.html` y `_astro/` queden en la raíz del bucket.*
 
 ### Paso 3: Crear la Distribución de CloudFront y el OAC
 1. Ve a **Amazon CloudFront** -> **Create a CloudFront distribution**.
-2. **Origin domain**: Selecciona el endpoint REST de tu bucket S3 desde la lista desplegable (`portafolio-astro-oac-web.s3.us-east-1.amazonaws.com`). *Nunca pegues un S3 Static Website Endpoint, ya que OAC solo funciona con el endpoint REST de S3.*
-3. **Origin access**: Elige **Origin access control settings (recommended)** -> haz clic en **Create new OAC** -> mantén marcada la opción **Sign requests (recommended)** y créalo.
-4. **Viewer protocol policy**: Selecciona **Redirect HTTP to HTTPS**.
-5. **Default root object**: Escribe `index.html`.
-6. Haz clic en **Create distribution** *(no abras todavía la URL de CloudFront hasta completar el Paso 4 para evitar cachear un error `403` temporal)*.
+2. *(Si te aparece el asistente de planes)*: Selecciona **Pay as you go** (en lugar del *Free flat-rate plan*, ya que este último fuerza la creación de un WAF) y asigna un nombre a la distribución.
+3. **Origin domain**: Selecciona el endpoint REST de tu bucket S3 desde la lista desplegable (`portafolio-astro-oac-web.s3.us-east-1.amazonaws.com`). *Nunca pegues un S3 Static Website Endpoint, ya que OAC solo funciona con el endpoint REST de S3.*
+4. **Origin access**: Elige **Origin access control settings (recommended)** (en el asistente nuevo, dentro de *Customize origin settings* o manteniendo los ajustes recomendados que crean el OAC) -> si lo creas manualmente, haz clic en **Create new OAC** -> **Sign requests (recommended)**.
+5. **Viewer protocol policy**: Selecciona **Redirect HTTP to HTTPS**.
+6. **Web Application Firewall (WAF)**: Selecciona **Do not enable security protections**.
+7. **Default root object**: Escribe `index.html` (sin `/` inicial). *(Si el asistente nuevo no muestra este campo al crear, configúralo apenas se cree la distribución en **General -> Settings -> Edit -> Default root object**. Deja **`Origin path`** en `Origins` completamente **vacío**).*
+8. Haz clic en **Create distribution** *(no abras todavía la URL de CloudFront hasta completar el Paso 4 para evitar cachear un error `403` temporal)*.
 
-### Paso 4: Aplicar la Política del Bucket en S3
-1. En el aviso superior de CloudFront, haz clic en **Copy policy**.
-2. Ve a tu bucket en **Amazon S3** -> pestaña **Permissions** -> sección **Bucket policy** -> **Edit**.
-3. Pega la política copiada y guarda los cambios:
+### Paso 4: Verificar la Política del Bucket en S3
+1. En el asistente actual de CloudFront, si mantuviste activa la opción recomendada **"Allow private S3 bucket access to CloudFront"**, CloudFront **crea el OAC y aplica automáticamente la Bucket Policy en S3**.
+2. Ve a tu bucket en **Amazon S3** -> pestaña **Permissions** -> sección **Bucket policy** y verifica que aparezca la política autorizando exclusivamente a tu distribución:
 
 ```json
 {
@@ -311,7 +315,7 @@ Ejecuta `npm run build` en tu máquina local para generar la carpeta `dist/`.
 }
 ```
 
-4. Haz clic en **Save changes**.
+3. *(Solo si configuraste el origen manualmente y la política en S3 está vacía: ve a **CloudFront -> Origins -> selecciona el origen S3 -> Edit -> Copy policy**, pégala en **S3 -> Permissions -> Bucket policy -> Edit** y haz clic en **Save changes**)*.
 
 ### Paso 5: Configurar Respuesta de Error Personalizada (404)
 1. En tu distribución de CloudFront, abre la pestaña **Error pages** -> **Create custom error response**.
@@ -520,4 +524,43 @@ aws s3 sync ./dist "s3://${BUCKET_NAME}" --delete
 aws cloudfront create-invalidation \
   --distribution-id "$DISTRIBUTION_ID" \
   --paths "/*"
+```
+
+---
+
+## 10. Eliminación de Recursos (Cleanup)
+
+Si realizaste este despliegue como laboratorio de práctica y deseas eliminar todos los recursos creados en tu cuenta de AWS:
+
+### Desde la Consola Web de AWS
+1. **Amazon CloudFront:** Selecciona tu distribución -> haz clic en **Disable** -> espera 2–5 minutos a que el estado vuelva a `Deployed` -> selecciónala de nuevo y haz clic en **Delete**.
+2. **Origin Access Control (OAC):** En el menú lateral de CloudFront, ve a **Security -> Origin access** -> selecciona el OAC creado y haz clic en **Delete**.
+3. **Amazon S3:** Selecciona tu bucket -> haz clic en **Empty** (Vaciar) confirmando `permanently delete` -> una vez vacío, selecciónalo y haz clic en **Delete**.
+4. **IAM:** Si creaste el usuario `deployer-astro-oac` únicamente para este laboratorio, desactiva o elimina sus Access Keys y elimina el usuario en **IAM -> Users**.
+
+### Desde AWS CLI
+
+```bash
+# 1. Vaciar y eliminar el bucket S3
+aws s3 rm "s3://${BUCKET_NAME}" --recursive
+aws s3api delete-bucket --bucket "$BUCKET_NAME" --region "$AWS_REGION"
+
+# 2. Deshabilitar la distribución de CloudFront antes de eliminarla
+aws cloudfront get-distribution-config --id "$DISTRIBUTION_ID" > /tmp/dist-cfg.json
+export ETAG=$(node -e "const d=require('/tmp/dist-cfg.json'); console.log(d.ETag)")
+node -e "const fs=require('fs'), d=require('/tmp/dist-cfg.json'); d.DistributionConfig.Enabled=false; fs.writeFileSync('/tmp/dist-disable.json', JSON.stringify(d.DistributionConfig))"
+
+aws cloudfront update-distribution \
+  --id "$DISTRIBUTION_ID" \
+  --if-match "$ETAG" \
+  --distribution-config file:///tmp/dist-disable.json > /dev/null
+
+# 3. Esperar a que se propague el estado deshabilitado y eliminar la distribución
+aws cloudfront wait distribution-deployed --id "$DISTRIBUTION_ID"
+export ETAG_DEL=$(aws cloudfront get-distribution-config --id "$DISTRIBUTION_ID" --query "ETag" --output text)
+aws cloudfront delete-distribution --id "$DISTRIBUTION_ID" --if-match "$ETAG_DEL"
+
+# 4. Eliminar el Origin Access Control (OAC)
+export OAC_ETAG=$(aws cloudfront get-origin-access-control --id "$OAC_ID" --query "ETag" --output text)
+aws cloudfront delete-origin-access-control --id "$OAC_ID" --if-match "$OAC_ETAG"
 ```
