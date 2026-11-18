@@ -156,14 +156,17 @@ Esta política restringe las acciones de S3 exclusivamente a buckets cuyo nombre
         "s3:DeleteBucket",
         "s3:ListBucket",
         "s3:GetBucketLocation",
+        "s3:GetBucketAcl",
         "s3:GetBucketOwnershipControls",
         "s3:PutBucketOwnershipControls",
+        "s3:GetBucketVersioning",
         "s3:GetEncryptionConfiguration",
         "s3:PutEncryptionConfiguration",
         "s3:GetBucketPublicAccessBlock",
         "s3:PutBucketPublicAccessBlock",
         "s3:GetBucketPolicy",
-        "s3:PutBucketPolicy"
+        "s3:PutBucketPolicy",
+        "s3:GetBucketPolicyStatus"
       ],
       "Resource": "arn:aws:s3:::portafolio-astro-*"
     },
@@ -198,6 +201,14 @@ Esta política restringe las acciones de S3 exclusivamente a buckets cuyo nombre
         "cloudfront:CreateInvalidation",
         "cloudfront:GetInvalidation",
         "cloudfront:ListInvalidations"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "WAFReadOnlyForCloudFrontConsoleUI",
+      "Effect": "Allow",
+      "Action": [
+        "wafv2:ListWebACLs"
       ],
       "Resource": "*"
     }
@@ -267,11 +278,11 @@ Ejecuta `npm run build` en tu máquina local para generar la carpeta `dist/`.
 
 ### Paso 3: Crear la Distribución de CloudFront y el OAC
 1. Ve a **Amazon CloudFront** -> **Create a CloudFront distribution**.
-2. **Origin domain**: Selecciona tu bucket de S3.
+2. **Origin domain**: Selecciona el endpoint REST de tu bucket S3 desde la lista desplegable (`portafolio-astro-oac-web.s3.us-east-1.amazonaws.com`). *Nunca pegues un S3 Static Website Endpoint, ya que OAC solo funciona con el endpoint REST de S3.*
 3. **Origin access**: Elige **Origin access control settings (recommended)** -> haz clic en **Create new OAC** -> mantén marcada la opción **Sign requests (recommended)** y créalo.
 4. **Viewer protocol policy**: Selecciona **Redirect HTTP to HTTPS**.
 5. **Default root object**: Escribe `index.html`.
-6. Haz clic en **Create distribution**.
+6. Haz clic en **Create distribution** *(no abras todavía la URL de CloudFront hasta completar el Paso 4 para evitar cachear un error `403` temporal)*.
 
 ### Paso 4: Aplicar la Política del Bucket en S3
 1. En el aviso superior de CloudFront, haz clic en **Copy policy**.
@@ -300,11 +311,11 @@ Ejecuta `npm run build` en tu máquina local para generar la carpeta `dist/`.
 }
 ```
 
-4. Haz clic en **Save changes** *(si acabas de crear la distribución hace pocos segundos y S3 rechaza temporalmente la política, espera 15–30 segundos a que el ARN de CloudFront termine de propagarse y vuelve a guardar)*.
+4. Haz clic en **Save changes**.
 
 ### Paso 5: Configurar Respuesta de Error Personalizada (404)
 1. En tu distribución de CloudFront, abre la pestaña **Error pages** -> **Create custom error response**.
-2. Selecciona **HTTP error code**: `403: Forbidden`, activa **Customize error response: Yes**, define **Response page path**: `/404.html` y **HTTP Response code**: `404: Not Found`.
+2. Selecciona **HTTP error code**: `403: Forbidden`, define **Error caching minimum TTL**: `10`, activa **Customize error response: Yes**, define **Response page path**: `/404.html` y **HTTP Response code**: `404: Not Found`.
 
 ---
 
@@ -323,7 +334,7 @@ Puedes realizar todo el aprovisionamiento y despliegue directamente desde la ter
 ```bash
 export AWS_REGION="us-east-1"
 export ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-export BUCKET_NAME="portafolio-astro-oac-${ACCOUNT_ID}"
+export BUCKET_NAME="portafolio-astro-oac-$(date +%s)"
 
 # Crear el bucket S3 (en us-east-1; si usas otra región, agrega: --create-bucket-configuration LocationConstraint="$AWS_REGION")
 aws s3api create-bucket \
