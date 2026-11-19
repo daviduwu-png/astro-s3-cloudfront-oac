@@ -513,7 +513,19 @@ Cada vez que modifiques el portafolio y desees publicar los cambios en producci�
 
 ### Desde AWS CLI
 
+> [!IMPORTANT]
+> **Si actualizas tu portafolio otro día (en una nueva ventana de terminal):**
+> 1. **Variables de sesión (`export`):** Las variables `$AWS_PROFILE`, `$BUCKET_NAME` y `$DISTRIBUTION_ID` solo viven mientras la terminal está abierta. Al abrir una terminal nueva otro día debes volver a definirlas con tus valores reales (no vuelvas a usar `$(date +%s)` o apuntarás a un bucket distinto).
+> 2. **Credenciales:**
+>    - Si usaste `aws configure --profile tutorial-oac`, el perfil ya quedó guardado en `~/.aws/credentials` (si habías desactivado la Access Key en IAM por seguridad, actívala antes de desplegar).
+>    - Si usaste **IAM Identity Center (SSO)**, tus credenciales temporales habrán expirado; renuévalas con `aws sso login --profile tutorial-oac`.
+
 ```bash
+# 0. (Necesario si abriste una nueva terminal otro día)
+export AWS_PROFILE="tutorial-oac"
+export BUCKET_NAME="portafolio-astro-oac-XXXXXXXXXX"   # Nombre real de tu bucket (puedes listarlo con: aws s3 ls)
+export DISTRIBUTION_ID="E1A2B3C4D5E6F7"                # ID real de tu distribución (ver con: aws cloudfront list-distributions --query "DistributionList.Items[*].[Id,DomainName]" --output table)
+
 # 1. Compilar nuevos cambios
 npm run build
 
